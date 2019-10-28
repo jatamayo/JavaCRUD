@@ -10,8 +10,8 @@ import org.netbeans.lib.awtextra.*;
 public class Vista extends JFrame{
     
     // FIELDS
-    JLabel lblId_cliente, lblNombre_cliente, lblDireccion_cliente, lblTelefono_cliente, lblEstado_cliente, lblSaldo_Cliente;
-    JTextField txtNombre_cliente, txtDireccion_cliente, txtTelefono_cliente;
+    JLabel lblId_cliente, lblNombre_cliente, lblDireccion_cliente, lblTelefono_cliente, lblEstado_cliente, lblSaldo_cliente;
+    JTextField txtNombre_cliente, txtDireccion_cliente, txtTelefono_cliente, txtSaldo_cliente;
     JComboBox cboEstado_cliente;
     
     JScrollPane scroll;
@@ -36,8 +36,10 @@ public class Vista extends JFrame{
         this.getContentPane().add(lblDireccion_cliente,new AbsoluteConstraints(10,70,100,20));
         lblTelefono_cliente = new JLabel("Telefono Cliente");
         this.getContentPane().add(lblTelefono_cliente,new AbsoluteConstraints(10,100,100,20));
+        lblSaldo_cliente = new JLabel("Saldo Cliente");
+        this.getContentPane().add(lblSaldo_cliente,new AbsoluteConstraints(10,130,100,20));
         lblEstado_cliente = new JLabel("Estado Cliente");
-        this.getContentPane().add(lblEstado_cliente,new AbsoluteConstraints(10,130,100,20));
+        this.getContentPane().add(lblEstado_cliente,new AbsoluteConstraints(10,160,100,20));
         
         //TEXT FIELDS
         txtNombre_cliente = new JTextField();
@@ -46,13 +48,15 @@ public class Vista extends JFrame{
         this.getContentPane().add(txtDireccion_cliente,new AbsoluteConstraints(120,70, 100, 20));
         txtTelefono_cliente = new JTextField();
         this.getContentPane().add(txtTelefono_cliente,new AbsoluteConstraints(120,100, 100, 20));
+        txtSaldo_cliente = new JTextField();
+        this.getContentPane().add(txtSaldo_cliente,new AbsoluteConstraints(120,130, 100, 20));
         
         //COMBO BOX
         Object items[]=new Object[2];
         items[0]="Solvente";
         items[1]="Moroso";
         cboEstado_cliente = new JComboBox(items);
-        this.getContentPane().add(cboEstado_cliente,new AbsoluteConstraints(120,130,100,20));
+        this.getContentPane().add(cboEstado_cliente,new AbsoluteConstraints(120,160,100,20));
         
         //BUTTONS
         btnAgregar=new JButton("Agregar");
@@ -74,10 +78,11 @@ public class Vista extends JFrame{
         model.addColumn("Nombre Cliente");
         model.addColumn("Direccion Cliente");
         model.addColumn("Telefono Cliente");
+        model.addColumn("Saldo Cliente");
         model.addColumn("Estado Cliente");
         tblDatos.setModel(model);
         scroll.setViewportView(tblDatos);
-        this.getContentPane().add(scroll,new AbsoluteConstraints(10,180,500,300));
+        this.getContentPane().add(scroll,new AbsoluteConstraints(10,200,500,300));
         this.setVisible(true);
         
     }

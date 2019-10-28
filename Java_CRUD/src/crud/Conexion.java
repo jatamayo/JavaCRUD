@@ -40,10 +40,4 @@ public class Conexion {
             System.out.println("Conexion NO terminada");
         }
     }
-    
-    public static void main(String[] args){
-        Conexion c=new Conexion();
-        c.conectar();
-        c.desconectar();
-    }
 }
