@@ -65,7 +65,7 @@ public class Vista extends JFrame{
         this.getContentPane().add(btnEliminar,new AbsoluteConstraints(240,40,100,20));
         btnGuardar=new JButton("Guardar");
         this.getContentPane().add(btnGuardar,new AbsoluteConstraints(240,70,100,20));
-        btnLimpiar=new JButton("Limpiar");
+        btnLimpiar=new JButton("Editar");
         this.getContentPane().add(btnLimpiar,new AbsoluteConstraints(240,100,100,20));
         btnPDF=new JButton("PDF");
         this.getContentPane().add(btnPDF,new AbsoluteConstraints(240,130,100,20));

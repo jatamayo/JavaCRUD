@@ -17,7 +17,6 @@ public class Clientes {
     }
     
     public Clientes(){
-        System.out.println("se creo cliente");
     }
 
     public Clientes(int id_cliente, String nombre_cliente, String direccion_cliente, int telefono_cliente, String estado_cliente, double saldo_cliente) {
