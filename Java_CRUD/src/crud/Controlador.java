@@ -38,6 +38,7 @@ public class Controlador implements ActionListener, MouseListener{
     Clientes p,p1;
     daoClientes dao;
     int id = 0;
+    ArrayList<Clientes> lista = null;
     
     public static void main(String[] args){
         Controlador c = new Controlador();
@@ -122,6 +123,7 @@ public class Controlador implements ActionListener, MouseListener{
                 p.add(Chunk.NEWLINE);
                 p.add("EXAMEN FINAL ALGORITOS");
                 p.add(Chunk.NEWLINE);
+                p.add(Chunk.NEWLINE);
                 p.add(Chunk.NEWLINE);             
                 p.setAlignment(Element.ALIGN_CENTER);
                 doc.add(p);
@@ -134,16 +136,52 @@ public class Controlador implements ActionListener, MouseListener{
                 PdfPCell c4 = new PdfPCell(new Phrase("Telefono Cliente", negrita));
                 PdfPCell c5 = new PdfPCell(new Phrase("Estado Cliente", negrita));
                 PdfPCell c6 = new PdfPCell(new Phrase("Saldo Cliente", negrita));
+                c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+                c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                c5.setHorizontalAlignment(Element.ALIGN_CENTER);
+                c6.setHorizontalAlignment(Element.ALIGN_CENTER);
+                c1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                c4.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                c5.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                c6.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                tabla.addCell(c1);
+                tabla.addCell(c2);
+                tabla.addCell(c3);
+                tabla.addCell(c4);
+                tabla.addCell(c5);
+                tabla.addCell(c6);
+                //ADD REGISTERS
+                for(Clientes cli: lista){
+                    tabla.addCell(""+cli.getId_cliente());
+                    tabla.addCell(cli.getNombre_cliente());
+                    tabla.addCell(cli.getDireccion_cliente());
+                    tabla.addCell(""+cli.getTelefono_cliente());
+                    tabla.addCell(cli.getEstado_cliente());
+                    tabla.addCell(""+cli.getSaldo_cliente());
+                }
+                Paragraph p1 = new Paragraph(10);
+                p1.add(Chunk.NEWLINE);
+                p1.add("NUMERO DE REGISTROS: "+lista.size());
+                p1.add(Chunk.NEWLINE);
+                p1.add(Chunk.NEWLINE);
+                p1.add(Chunk.NEWLINE);             
+                p1.setAlignment(Element.ALIGN_LEFT);
                 
+                doc.add(tabla);
+                doc.add(p1);
                 doc.close();
                 archivo.close();
                 Desktop.getDesktop().open(file);
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this.v, "Error al crear Archivo");
             } catch (DocumentException ex) {
-                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this.v, "Error al generar PDF");
             } catch (IOException ex) {
-                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this.v, "Error Generate PDF");
             }
         
         }
@@ -155,7 +193,8 @@ public class Controlador implements ActionListener, MouseListener{
         while(v.model.getRowCount()>0){
             v.model.removeRow(0);
         }
-        ArrayList<Clientes> lista = dao.read();
+        lista = dao.read();
+        //ArrayList<Clientes> lista = dao.read();
         for(Clientes c: lista){
             Object item[] = new Object[6];
             item[0] = c.getId_cliente();
