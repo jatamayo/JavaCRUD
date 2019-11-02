@@ -1,5 +1,4 @@
 package crud;
-
 /**
  *
  * @author jalej
@@ -12,9 +11,6 @@ public class Clientes {
     String estado_cliente;
     double saldo_cliente;
 
-    public static void main(String[] args){
-        System.out.println("model clientes");
-    }
     
     public Clientes(){
     }

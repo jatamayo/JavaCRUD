@@ -31,7 +31,7 @@ public class Conexion {
         }
         return cx;
     }
-    
+
     public void desconectar(){
         try {
             cx.close();

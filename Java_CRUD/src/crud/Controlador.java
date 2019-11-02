@@ -35,10 +35,28 @@ import javax.swing.JOptionPane;
 public class Controlador implements ActionListener, MouseListener{
     
     Vista v;
+    
     Clientes p,p1;
+    Compra com, com1;
+    Facturacion fac, fac1;
+    Inventario inv, inv1;
+    Proveedor prov, prov1;
+    
     daoClientes dao;
+    daoCompra daoCom;
+    daoFacturacion daoFac;
+    daoInventario daoInv;
+    daoProveedor daoProv;
+    
     int id = 0;
+    
     ArrayList<Clientes> lista = null;
+    ArrayList<Compra> lista2 = null;
+    ArrayList<Proveedor> lista3 = null;
+    ArrayList<Inventario> lista4 = null;
+    ArrayList<Facturacion> lista5 = null;
+    
+    
     
     public static void main(String[] args){
         Controlador c = new Controlador();
@@ -48,7 +66,16 @@ public class Controlador implements ActionListener, MouseListener{
         v = new Vista();
         
         dao = new daoClientes();
-        p1=new Clientes();
+        p1 = new Clientes();        
+        daoCom = new daoCompra();
+        com1 = new Compra();        
+        daoFac = new daoFacturacion();
+        fac1=new Facturacion();        
+        daoInv = new daoInventario();
+        inv1=new Inventario();
+        daoProv = new daoProveedor();
+        prov1=new Proveedor();
+        
         
         // BUTTONS ACTIONS
         v.btnAgregar.addActionListener(this);
@@ -57,29 +84,75 @@ public class Controlador implements ActionListener, MouseListener{
         v.btnLimpiar.addActionListener(this);
         v.btnPDF.addActionListener(this);
         v.tblDatos.addMouseListener(this);
+        
+        
         refrescarTabla();
+        
+        // BUTTONS COMPRAS
+        v.btnAgregar_compra.addActionListener(this);
+        v.btnEliminar_compra.addActionListener(this);
+        v.btnGuardar_compra.addActionListener(this);
+        v.btnLimpiar_compra.addActionListener(this);
+        v.btnPDF_compra.addActionListener(this);
+        v.tblDatosCompra.addMouseListener(this);
+        refrescarTabla();
+        
+        // BUTTONS FACTURACION
+        v.btnGenerar_factura.addActionListener(this);
+        refrescarTabla();
+
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        
+        //ADD NEW CLIENT BUTTON
         if(e.getSource()==v.btnAgregar){
-            //ADD NEW CLIENT LOGIC
             p = new Clientes();
             p.setNombre_cliente(v.txtNombre_cliente.getText());
             p.setDireccion_cliente(v.txtDireccion_cliente.getText());
             p.setTelefono_cliente(Integer.parseInt(v.txtTelefono_cliente.getText()));
             p.setEstado_cliente(v.cboEstado_cliente.getSelectedItem().toString());
             p.setSaldo_cliente(Integer.parseInt(v.txtSaldo_cliente.getText()));
-            
-            
             if(!dao.create(p)){
                 JOptionPane.showMessageDialog(this.v,"ERROR al insertar cliente");
             }
             limpiarCampos();
-            
         }
+        //ADD NEW COMPRA BUTTON
+        if(e.getSource()==v.btnAgregar_compra){
+            com = new Compra();
+            com.setNombre_articulo(v.txtNombre_articulo.getText());
+            com.setId_proveedor(Integer.parseInt(v.cboNombre_proveedor.getSelectedItem().toString()));
+            com.setCantidad_articulo(Integer.parseInt(v.txtCantidad_articulo.getText()));
+            com.setPrecio_articulo(Integer.parseInt(v.txtPrecio_articulo.getText()));
+            if(!daoCom.create(com)){
+                JOptionPane.showMessageDialog(this.v,"ERROR al insertar compra");
+            }
+            inv = new Inventario();
+            daoInv.getIdCompra();
+            if(!daoInv.create(inv)){
+                JOptionPane.showMessageDialog(this.v,"ERROR al insertar Inventario");
+            }
+            limpiarCampos();
+        }
+        
+        //ADD NEW FACTURACION BUTTON
+        if(e.getSource()==v.btnGenerar_factura){
+            System.out.println("GENERAR FACTURA");
+            fac = new Facturacion();
+            fac.setId_cliente(Integer.parseInt(v.txtId_cliente.getText()));
+            fac.setId_compra(Integer.parseInt(v.txtId_compra.getText()));
+            if(!daoFac.create(fac)){
+                JOptionPane.showMessageDialog(this.v,"ERROR al insertar factura");
+            }
+            limpiarCampos();
+        }
+        
+        
+        
+        // DELETE CLIENT
         if(e.getSource()==v.btnEliminar){
-            //DELETE CLIENT LOGIC
             int x = JOptionPane.showConfirmDialog(this.v, "ESTA SEGURO DE ELIMINAR REGISTRO");
             System.out.println(x + "  " + id);
             if(x == 0 && id > 0){
@@ -88,7 +161,20 @@ public class Controlador implements ActionListener, MouseListener{
                 }
             }
         }
+        // DELETE COMPRA
+        if(e.getSource()==v.btnEliminar_compra){
+            int x = JOptionPane.showConfirmDialog(this.v, "ESTA SEGURO DE ELIMINAR REGISTRO");
+            System.out.println(x + "  " + id);
+            if(x == 0 && id > 0){
+                if(!daoCom.delete(id)){
+                    JOptionPane.showMessageDialog(this.v,"NO elimino registro");
+                }
+            }
+        }
         
+        
+        
+        //SAVE CLIENT
         if(e.getSource()==v.btnGuardar){
             //SAVE CLIENT LOGIC
             p1.setNombre_cliente(v.txtNombre_cliente.getText());
@@ -100,10 +186,30 @@ public class Controlador implements ActionListener, MouseListener{
                 JOptionPane.showMessageDialog(this.v, "Nose actualizo registo");
             }
         }
+        //SAVE COMPRA
+        if(e.getSource()==v.btnGuardar_compra){
+            //SAVE CLIENT LOGIC
+            com.setNombre_articulo(v.txtNombre_articulo.getText());
+            com.setId_proveedor(Integer.parseInt(v.cboNombre_proveedor.getSelectedItem().toString()));
+            com.setCantidad_articulo(Integer.parseInt(v.txtCantidad_articulo.getText()));
+            com.setPrecio_articulo(Integer.parseInt(v.txtPrecio_articulo.getText()));
+            if(!daoCom.update(com)){
+                JOptionPane.showMessageDialog(this.v, "Nose actualizo registo");
+            }
+        }
+        
+        
+        //GENERATE PDF CLIENT
         if(e.getSource()==v.btnLimpiar){
-            //GENERATE PDF CLIENT
             limpiarCampos();
         }
+        //GENERATE PDF COMPRA
+        if(e.getSource()==v.btnLimpiar){
+            limpiarCampos();
+        }
+        
+
+        
         if(e.getSource()==v.btnPDF){
             //GENERATE PDF
             try {
@@ -185,16 +291,19 @@ public class Controlador implements ActionListener, MouseListener{
             }
         
         }
+        
+        
+        
         refrescarTabla();
     }
 
 
     public void refrescarTabla(){
+        //REFRESH CLIENTES
         while(v.model.getRowCount()>0){
             v.model.removeRow(0);
         }
         lista = dao.read();
-        //ArrayList<Clientes> lista = dao.read();
         for(Clientes c: lista){
             Object item[] = new Object[6];
             item[0] = c.getId_cliente();
@@ -206,7 +315,52 @@ public class Controlador implements ActionListener, MouseListener{
             v.model.addRow(item);
         }
         v.tblDatos.setModel(v.model);
+        //REFRESH COMPRAS
+        while(v.model2.getRowCount()>0){
+            v.model2.removeRow(0);
+        }
+        lista2 = daoCom.read();
+        for(Compra com: lista2){
+            Object item[] = new Object[5];
+            item[0] = com.getId_compra();
+            item[1] = com.getId_proveedor();
+            item[2] = com.getNombre_articulo();
+            item[3] = com.getCantidad_articulo();
+            item[4] = com.getPrecio_articulo();
+            v.model2.addRow(item);
+        }
+        v.tblDatosCompra.setModel(v.model2);
+        //REFRESH PROVEEDOR
+        while(v.model3.getRowCount()>0){
+            v.model3.removeRow(0);
+        }
+        lista3 = daoProv.read();
+        for(Proveedor prov: lista3){
+            Object item[] = new Object[4];
+            item[0] = prov.getId_proveedor();
+            item[1] = prov.getNombre_proveedor();
+            item[2] = prov.getDireccion_proveedor();
+            item[3] = prov.getTelefono_proveedor();
+            v.model3.addRow(item);
+        }
+        v.tblDatosProveedor.setModel(v.model3);
+        //REFRESH INVENTARIO
+        while(v.model4.getRowCount()>0){
+            v.model4.removeRow(0);
+        }
+        lista4 = daoInv.read();
+        for(Inventario inv: lista4){
+            Object item[] = new Object[2];
+            item[0] = inv.getId_inventario();
+            item[1] = inv.getId_compra();
+            v.model4.addRow(item);
+        }
+        v.tblDatosInventario.setModel(v.model4);
     }
+    
+
+    
+    
     
     public void limpiarCampos(){
         v.txtNombre_cliente.setText("");
